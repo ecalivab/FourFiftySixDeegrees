@@ -1,0 +1,237 @@
+﻿@using FortyFiftySixDeegrees.Models
+@using FortyFiftySixDeegrees.Helper
+@model Tuple<List<Pizza>, Order>
+@*Tuple<List<Pizza>, List<PartialOrder>> For AjaxView*@
+
+@{
+    ViewBag.Title = "ListMenuPizza";
+   
+}
+
+<!-- ListMenuPizza-->
+<div class="container-fluid p-0">
+    <div class="row divContenitore">
+        <div style="padding-top:150px;padding-bottom:355px">
+            <div class="container">
+            </div>
+        </div>
+
+        <div id="mainContentPanel" class="container bg-white mb-3" style="padding-top:20px">
+            <div class="container">
+                <h1 class="fw-bold" >Menu</h1>
+                <h3 class="mb-3">Napoletan pizza! A Wonderful Tradition</h3>
+            </div>
+
+            <div class="row whiteBg">
+                <div class="col-md-7 mb-3 col-sm-10">
+                    <div id="containerMenu" class="container bg-white mt-3">
+                        @foreach (var item in Model.Item1)
+                        {
+                            var price = item.Price.ToString().Replace(",", ".");
+                            <div class="row mt-3 handCursor">
+                                <div class="ms-2 col-6 col-md-12">
+                                    <div class="row mt-1 menuItem" data-name="@item.Name" data-price="@price" data-id="@item.PizzaId">
+                                        <div class="col-md-2">
+                                            <img class="img-fluid menuIMG" src=@Html.Raw(item.URL)>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h5 class="fw-bold"> @Html.DisplayFor(modelItem => item.Name)</h5>
+                                            <p>@Html.DisplayFor(modelItem => item.DescriptionEN)</p>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center justify-content-end">
+                                            <span class="price">@Html.Raw(@price)€</span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-3">
+                    <div class="container mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 clas="mt-3" id="emptyCart">Cart is Empty!</h5>
+                                <table class="table table-borderless text-sm-center" id="orderListTable"></table>
+                                <hr class="super" />
+                                <table width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>TOTAL</strong></td>
+                                            <td class="text-right">
+                                                <strong>
+                                                    <span id="totval">0</span>€
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br />
+                                <div id="userData">
+                                    <button id="orderNow" type="button" class="btn btn-success btn-block btn-lg text-center" href="" style="width:95%" disabled>Order Now</button>
+                                    <input id="customerName" name="CustomerName" class="form-control mb-2" type="text" placeholder="Insert your Name" required hidden />
+                                    <input id="phoneNum" name="TelephoneNumber" class="form-control mb-2" type="number" placeholder="Insert your PhoneNumer" required hidden />
+                                    <input id="date" name="Data" type="date" class="mb-3 form-control" hidden />
+                                    <button id="sendOrder" class="btn btn-success btn-block btn-lg text-center" href="" style="width:95%" hidden>Send Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Modal title</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="btn-group-sm row">
+                    <div class="col-sm-4 btn-group-sm">
+                        <button type="button" class="btn btn-outline-secondary btn-modal-body" id="minus" disabled>-</button>
+                        <span class="fw-bolder" id="quantityModal">1</span>
+                        <button type="button" class="btn btn-outline-secondary btn-modal-body" id="plus">+</button>
+                    </div>
+
+                    <div class="col-sm-6" style="line-height: 34px;">
+                        <span style="float:right;font-size:20px">
+                            Price:
+                            <span id="pricetd" class="pricetd pull-right fw-bolder"> <span id="priceQuantity">5.00</span>€</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-form-label col-sm-12">Note</label>
+                    <div class="col-sm-12">
+                        <textarea id="productNotes" name="notes" class="form-control"></textarea>
+                        <small id="product_description_help" class="form-text text-muted">Write down any changes or requests: we will do our best to respect them</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="addToOrder" class="btn btn-success">Add to Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var jsonArrayDetailOrder = [];
+        var totalAmount = 0;
+        $(".menuItem").click(function () {
+            var pizzaName = $(this).data('name');
+            var pizzaPrice = parseFloat($(this).data('price'));
+            var quantity = parseInt($("#quantityModal").text(), 10);
+            var pID = $(this).data("id");
+
+            $('#exampleModalLabel').text(pizzaName);
+            $('#priceQuantity').text(pizzaPrice);
+            $("#menuModal").modal("show");
+
+            //Take Care for the logic when the + button in the modal is pressed
+            $("#plus").click(function () {
+                quantity = addBtn(pizzaPrice, quantity);
+
+            });
+            //Take Care for the logic when the - button in the modal is pressed
+            $('#minus').click(function () {
+                quantity = subBtn(pizzaPrice, quantity);
+            });
+
+            $("#addToOrder").click(function () {
+                $('#orderListTable').append("<tr class= \"d-sm-table-row\"> \
+                    <td class =\"col hiddenText\>"+ pID + "</td > \
+                    <td class =\"col\">"+ quantity + "</td > \
+                    <td class =\"col\">"+ pizzaName + "</td> \
+                    <td class =\"col pricePartial\">"+ $('#priceQuantity').text() + "</td>\
+                    <td><span id=\"DeleteButton\" class=\"material-icons handCursor deleteRow\">delete_outline</span></td>\
+                    </tr>");
+                $('#menuModal').modal('toggle');
+                $('#emptyCart').hide();
+                $('#orderNow').prop("disabled", false);
+                totalAmount = calcTotal();
+                //Add to JSON Array
+                var detailOrderObject =
+                {
+                    "PizzaID": pID,
+                    "Quantity": quantity,
+                };
+
+                jsonArrayDetailOrder.push(detailOrderObject);
+            });
+        });
+
+        //Reset the quantity variable otherwise it will stay the same and cause problems when new pizza is selected
+        $("#menuModal").on("hidden.bs.modal", function () {
+            resetModal();
+        });
+
+        $("#orderListTable").on("click", ".deleteRow", function () {
+            var index = $(this).closest("tr").index();
+            $(this).closest("tr").remove();
+            totalAmount = calcTotal();
+            if ($("#orderListTable").children().length == 0) {
+                $('#emptyCart').show();
+                $("#orderNow").show();
+                $("#customerName").prop("hidden", true);
+                $("#phoneNum").prop("hidden", true);
+                $("#sendOrder").prop("hidden", true);
+                $('#orderNow').prop("disabled", true);
+            }
+
+            jsonArrayDetailOrder.splice(index, 1);
+        });
+
+        $("#orderNow").click(function () {
+            $("#orderNow").hide();
+            $("#customerName").prop("hidden", false);
+            $("#phoneNum").prop("hidden", false);
+            $("#sendOrder").prop("hidden", false);
+            $("#date").prop("hidden", false);
+        });
+
+        $("#sendOrder").click(function () {
+            var customerName = $("#customerName").val();
+            var phoneNumber = $("#phoneNum").val();
+            var date = $("#date").val(); 
+
+            var orderObject =
+            {
+                "CustomerName": customerName,
+                "TelephoneNumber": phoneNumber,
+                "Data": date,
+                "TotalAmount": totalAmount,
+                "OrderDetails": jsonArrayDetailOrder,
+            };
+           
+            $.ajax({
+                url: '/' + 'MenuPizza' + '/SendOrder',
+                data: JSON.stringify(orderObject),
+                contentType: "application/json",
+                type: "POST",
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.success) {
+                        confirm(data.responseText) ? window.location.reload() : "";
+                    } else {
+                        confirm(data.responseText) ? window.location.reload() : "" ;
+                    }
+                }
+            });
+                       
+        });
+
+    });
+</script>
+

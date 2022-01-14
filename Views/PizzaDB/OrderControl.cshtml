@@ -1,0 +1,103 @@
+﻿@model IEnumerable<FortyFiftySixDeegrees.Models.Order>
+
+@{
+    ViewBag.Title = "Orders";
+}
+
+<style>
+    body {
+        background-image: none !important;
+        background-color: white !important;
+    }
+</style>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="container">
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">
+                    Customer Name
+                </th>
+                <th scope="col">                 
+                    Phone
+                </th>
+                <th scope="col">                  
+                    Picking Date
+                </th>
+                <th scope="col">
+                    Amount                 
+                </th>
+                <th scope="col">
+                    is Ready?                 
+                <th scope="col">
+                    <a href="@Url.Action("OrderControl", "PizzaDB", new { filter = true })"><span title="Filter by Not Ready" class="material-icons" style="color:white">filter_alt</span></a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TelephoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Data)
+                    </td>
+                    <td>
+                        <span id="totA-@item.OrderID">@Html.DisplayFor(modelItem => item.TotalAmount)</span>
+                    </td>
+                    <td>
+                        <label class="custom-checkbox">
+                            <input id="orderReady" type="checkbox" value="@item.OrderID" hidden/>
+                            <span id="checkIcon" class="material-icons @(item.Ready ? "checkedIcon" : "")">check_circle</span>
+                        </label>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("EditOrder", "PizzaDB", new { id = item.OrderID })"><span class="material-icons" style="color:yellowgreen">edit</span></a>
+                        <a href="@Url.Action("DeleteOrder", "PizzaDB", new { id = item.OrderID }) " onclick="return confirm('Are you sure you want to delete this order?')"><span id="DeleteOrder" name=@(new { id = item.OrderID }) class="material-icons handCursor" style="color:red">remove_circle</span></a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    @Html.Partial("~/Views/Shared/_OrderDetailTable.cshtml", item)
+                </tr>
+                
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        $("#orderReady").click(function () {
+            //If the icon does not have the class it means is unchecked and the flag should toogle to true.
+            var isReady = $('#checkIcon').hasClass("checkedIcon") ? false : true; 
+            var orderId = $(this).val();
+            checkbox = { "orderId": orderId, "isReady": isReady }
+            $.ajax({
+                url: '/PizzaDB/UpdateOrderReady',
+                method: "POST",
+                dataType: 'json',
+                data: checkbox, // serializes the form's elements.
+                cache: false,
+                success: function (data) {
+                    if (data.success) {
+                        data.ready ? $("#checkIcon").addClass('checkedIcon') : $("#checkIcon").removeClass('checkedIcon');
+                        $("#orderReady").prop("checked", data.ready);
+                    }
+                    else {
+                        alert("Something went wrong!");
+                    }
+                }
+            });
+        });
+    });
+</script>

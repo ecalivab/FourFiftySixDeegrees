@@ -1,0 +1,147 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    overflow: auto;
+    background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url('../static/img/11-1-of-1.jpg');
+    background-position: left top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    /*    padding-left: 15px;
+    padding-right: 15px;*/
+
+    max-width: 100%;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+
+
+.divContenitore {
+    overflow: auto;
+}
+
+#mainContentPanel {
+    /*background-color: #f4f4f4;*/
+    background-color:white;
+    height: auto;
+}
+.bottomContentPanel {
+    background-color: transparent;
+    height: 350px;
+}
+#homeGreetings {
+    color: white;
+    font-size: 70px;
+    text-shadow: 2px 2px 4px #808080;
+}
+
+.indexIMG {
+    width: 80%;
+    border-radius: 15px 50px;
+}
+
+.indexIMG45 {
+    width: 45%;
+    border-radius: 15px 50px;
+}
+
+/*menu CSS*/
+.whiteBg {
+    background-color: #f4f4f4;
+}
+
+.descriptionInput {
+    max-width:600px;
+}
+
+.paddingLeft30 {
+    padding-left:30px;
+}
+.menuIMG {
+    height:135px;
+    width:165px;
+    border-radius:15px;
+}
+
+.price {
+    color:#ff1a00;
+    padding-right:15px;
+    font-size:x-large;
+    font-weight:700;
+}
+
+#containerMenu {
+    padding-left:5px!important;
+}
+
+
+.btn-modal-body {
+    padding: 10px 15px !important;
+}
+
+#quantityModal {
+    font-size:20px;
+    padding-right:10px;
+    padding-left:10px;
+}
+
+.hiddenText {
+    display:none;
+}
+
+.handCursor {
+    cursor:pointer;
+}
+
+.navBarStyle {
+    background: rgb(0,0,0);
+    background: linear-gradient(90deg, rgba(0,0,0,0.981127485173757) 0%, rgba(161,47,10,1) 61%, rgba(228,36,28,1) 100%);
+}
+
+.nav-link {
+    color:white;
+    font-weight:700;
+}
+
+.paragraphIndex {
+    font-size:25px;
+    padding-top:10px;
+    padding-right:80px
+}
+
+.internalTable 
+{
+    width:50%;
+    margin:auto;
+}
+
+.internalTable td {
+    width: 0%;
+}
+
+.checkedIcon {
+    color: green;
+}
+
+.underline {
+    text-decoration: underline;
+    text-decoration-color:orangered;
+}
+
+.center {
+    margin: 0 auto;
+    width: 80%;
+}

@@ -1,0 +1,66 @@
+﻿@model FortyFiftySixDeegrees.Models.Pizza
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        background-image: none !important;
+        background-color: white !important;
+    }
+</style>
+
+<h2 class="paddingLeft30">Details</h2>
+
+<div>
+    <h4 class="paddingLeft30">Pizza</h4>
+    <hr />
+    <dl class="dl-horizontal paddingLeft30">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.URL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.URL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DescriptionEN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DescriptionEN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DescriptionFI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DescriptionFI)
+        </dd>
+
+    </dl>
+</div>
+<p class="paddingLeft30">
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PizzaId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

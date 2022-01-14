@@ -1,0 +1,80 @@
+﻿@model FortyFiftySixDeegrees.Models.Order
+
+<td colspan="6">
+    <table id="orderListTable" class="table mb-0 table-borderless internalTable">
+        <thead>
+            <tr>
+                <th>Pizza</th>
+                <th>
+                    <span class="d-flex">Quantity
+                        <a href="@Url.Action("CreateOrderDetail", "PizzaDB", new { id = Model.OrderID })"><span id="addRow" title="Add New Row" class="material-icons handCursor px-5 addRow" style="color:forestgreen">add_circle</span></a>
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model.OrderDetails)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => detail.Pizza.Name)
+                    </td>
+                    <td>
+                        <span class="d-flex">
+                            <span data-mid="@Model.OrderID" data-id="@detail.OrderDetailsID" data-price="@detail.Pizza.Price" class="material-icons handCursor pe-2 minus">remove_circle</span>
+                            <span id="q-@detail.OrderDetailsID">@Html.DisplayFor(modelItem => detail.Quantity)</span>
+                            <span data-mid="@Model.OrderID" data-id="@detail.OrderDetailsID" data-price="@detail.Pizza.Price" class="material-icons handCursor ps-2 plus">add_circle</span>
+                        </span>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </td>
+
+<script>
+    $(function () {    
+        $("#orderListTable").on("click", ".plus", function (e) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            var quantityText = $(this).prev("span");
+            var op = 1;
+    
+            doClick(this, op, quantityText)
+        });
+
+        $("#orderListTable").on("click", ".minus", function (e) {
+            e.stopImmediatePropagation();
+            var quantityText = $(this).next("span");
+            var op = 2;
+       
+            doClick(this, op, quantityText)
+        });
+
+        function doClick(obj, operation, quantityText, e)
+        {
+            var orderID = $(obj).data('id');
+            var parentID = $(obj).data('mid');
+            var price = $(obj).data('price');
+           
+            var formData = { 'orderID': orderID, "parentID": parentID, "price": price, "op": operation };
+            $.ajax({
+                url: '/PizzaDB/UpdateOrderDetails',
+                method: "POST",
+                dataType: 'json',
+                data: formData, // serializes the form's elements.
+                cache: false,
+                success: function (data) {
+                    if (data.success) {
+                        $('#q-' + data.id).text(data.newQuantity);
+                        $('#totA-' + data.pid).text(data.newAmount);
+                    }
+                    else
+                    {
+                        alert("Something went wrong!");
+                    }
+                }
+            });
+        }
+    });
+</script>

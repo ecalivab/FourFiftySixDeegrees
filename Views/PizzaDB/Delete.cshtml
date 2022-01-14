@@ -1,0 +1,74 @@
+﻿@model FortyFiftySixDeegrees.Models.Pizza
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        background-image: none !important;
+        background-color: white !important;
+    }
+</style>
+
+
+
+<h2 class="paddingLeft30">Delete</h2>
+
+<h3 class="paddingLeft30">Are you sure you want to delete this?</h3>
+<div>
+    <h4 class="paddingLeft30">Pizza</h4>
+    <hr />
+    <dl class="dl-horizontal paddingLeft30">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.URL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.URL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DescriptionEN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DescriptionEN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DescriptionFI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DescriptionFI)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color paddingLeft30">
+            <input type="submit" value="Delete" class="btn btn-outline-danger" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

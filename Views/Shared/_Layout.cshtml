@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 456 Degrees</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/Custom")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<body>
+
+    <nav class="navbar fixed-top navbar-expand-lg navBarStyle">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-lg-5" href="@Url.Action("Index", "Home")">
+                <img src="~/static/img/cropped-logo_final_outlined_page-0001-1.jpg" alt="" width="70" height="60" class="d-inline-block align-text-top" />
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav ms-auto fw-bold fs-4 pe-lg-5 me-lg-5">
+                    <a class="nav-link" href="@Url.Action("Index", "Home")">Home</a>
+                    <a class="nav-link" href="@Url.Action("ListMenuPizza", "MenuPizza")">Menu</a>
+                    <a class="nav-link" href="@Url.Action("About", "Home")">About</a>
+                    <a class="nav-link" href="@Url.Action("Contact", "Home")">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+        @*<footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>*@
+    </div>
+
+</body>
+</html>

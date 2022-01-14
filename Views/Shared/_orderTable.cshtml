@@ -1,0 +1,60 @@
+﻿@model List<FortyFiftySixDeegrees.Models.PartialOrder>
+
+
+@if (Model.Count > 0)
+{
+    <table class="table table-borderless text-sm-center" id="orderListTable">
+        <input id="rowIndex" name="rowIndex" type="hidden" value="-1" />
+        @foreach (var item in Model)
+        {
+            <tr class="d-sm-table-row">
+                <td class="col">@Html.DisplayFor(modelItem => item.Quantity)</td>
+                <td class="col">@Html.DisplayFor(modelItem => item.PizzaName)</td>
+                <td class="col">@Html.DisplayFor(modelItem => item.Amount)€</td>
+                <td><i id="DeleteButton" class="material-icons handCursor deleteRow" onclick="">delete_outline</i></td>
+            </tr>
+        }
+    </table>
+    <hr class="super" />
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td><strong>TOTAL</strong></td>
+                <td class="text-right">
+                    <strong>
+                        <span id="totval">@ViewBag.sum</span>€
+                    </strong>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+else
+{
+    <h5 clas="mt-3" id="EmptyCart">Cart is Empty!</h5>
+    <hr class="super" />
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td><strong>TOTAL</strong></td>
+                <td class="text-right">
+                    <strong>
+                        <span id="totval">0</span>€
+                    </strong>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+<script>
+    $(function () {
+        $("#orderListTable").on("click", ".deleteRow", function () {
+            var row_index = $(this).closest("tr").index();
+            $("#isDeleted").val("True");
+            $("#rowIndex").val(row_index);
+            $("#Cart").submit();
+        });
+    });
+</script>
