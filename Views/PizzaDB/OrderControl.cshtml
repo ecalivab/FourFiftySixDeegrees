@@ -56,8 +56,7 @@
                     </td>
                     <td>
                         <label class="custom-checkbox">
-                            <input id="orderReady" type="checkbox" value="@item.OrderID" hidden/>
-                            <span id="checkIcon" class="material-icons @(item.Ready ? "checkedIcon" : "")">check_circle</span>
+                            <span onclick="updateOrderStatus(@item.OrderID, this)" class="material-icons handCursor @(item.Ready ? "checkedIcon" : "")">check_circle</span>
                         </label>
                     </td>
                     <td>
@@ -76,28 +75,25 @@
 </div>
 
 <script>
-    $(function () {
-        $("#orderReady").click(function () {
-            //If the icon does not have the class it means is unchecked and the flag should toogle to true.
-            var isReady = $('#checkIcon').hasClass("checkedIcon") ? false : true; 
-            var orderId = $(this).val();
-            checkbox = { "orderId": orderId, "isReady": isReady }
-            $.ajax({
-                url: '/PizzaDB/UpdateOrderReady',
-                method: "POST",
-                dataType: 'json',
-                data: checkbox, // serializes the form's elements.
-                cache: false,
-                success: function (data) {
-                    if (data.success) {
-                        data.ready ? $("#checkIcon").addClass('checkedIcon') : $("#checkIcon").removeClass('checkedIcon');
-                        $("#orderReady").prop("checked", data.ready);
-                    }
-                    else {
-                        alert("Something went wrong!");
-                    }
+
+    const updateOrderStatus = (orderId, element) => { 
+        //If the icon does not have the class it means is unchecked and the flag should toogle to true.
+        var isReady = $(element).hasClass("checkedIcon") ? false : true; // Inverted Logic
+        checkbox = { "orderId": orderId, "isReady": isReady }
+        $.ajax({
+            url: '/PizzaDB/UpdateOrderReady',
+            method: "POST",
+            dataType: 'json',
+            data: checkbox, // serializes the form's elements.
+            cache: false,
+            success: function (data) {
+                if (data.success) {
+                    data.ready ? $(element).addClass('checkedIcon') : $(element).removeClass('checkedIcon');
                 }
-            });
+                else {
+                    alert("Something went wrong!");
+                }
+            }
         });
-    });
+    }
 </script>

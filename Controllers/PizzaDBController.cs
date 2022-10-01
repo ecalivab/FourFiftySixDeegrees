@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using FortyFiftySixDeegrees.DataAccess;
 using FortyFiftySixDeegrees.Models;
@@ -15,6 +13,8 @@ namespace FortyFiftySixDeegrees.Controllers
     public class PizzaDBController : Controller
     {
         private PizzaContext db = new PizzaContext();
+
+        // PizzaDB/OrderControl to access the order list to edit
 
         // GET: PizzaDB
         public ActionResult Index()

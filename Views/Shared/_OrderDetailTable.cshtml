@@ -1,7 +1,7 @@
 ﻿@model FortyFiftySixDeegrees.Models.Order
 
 <td colspan="6">
-    <table id="orderListTable" class="table mb-0 table-borderless internalTable">
+    <table class="table mb-0 table-borderless internalTable orderListTable">
         <thead>
             <tr>
                 <th>Pizza</th>
@@ -34,24 +34,25 @@
 
 <script>
     $(function () {    
-        $("#orderListTable").on("click", ".plus", function (e) {
+        $(".orderListTable").on("click", ".plus", function (e) {
             e.stopImmediatePropagation();
             e.preventDefault();
             var quantityText = $(this).prev("span");
             var op = 1;
-    
+            console.log($(this).data('mid'));
             doClick(this, op, quantityText)
         });
 
-        $("#orderListTable").on("click", ".minus", function (e) {
+        $(".orderListTable").on("click", ".minus", function (e) {
             e.stopImmediatePropagation();
+            e.preventDefault();
             var quantityText = $(this).next("span");
             var op = 2;
        
             doClick(this, op, quantityText)
         });
 
-        function doClick(obj, operation, quantityText, e)
+        function doClick(obj, operation)
         {
             var orderID = $(obj).data('id');
             var parentID = $(obj).data('mid');
